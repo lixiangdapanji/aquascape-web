@@ -1,0 +1,44 @@
+{
+  "name": "@aquascape/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "aquascape-studio Next.js 15 web client. Calls aquascape-api via Connect-ES.",
+  "scripts": {
+    "dev": "next dev --turbo",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "lint": "next lint",
+    "test": "echo 'no web tests yet'",
+    "buf:generate": "buf generate"
+  },
+  "dependencies": {
+    "@aquascape/botany": "^0.1.0",
+    "@aquascape/render": "^0.1.0",
+    "@aquascape/ui": "^0.1.0",
+    "@bufbuild/protobuf": "^2.2.0",
+    "@connectrpc/connect": "^2.0.0",
+    "@connectrpc/connect-web": "^2.0.0",
+    "@react-three/fiber": "^8.17.10",
+    "next": "^15.0.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "three": "^0.160.1"
+  },
+  "devDependencies": {
+    "@bufbuild/buf": "^1.45.0",
+    "@bufbuild/protoc-gen-es": "^2.2.0",
+    "@connectrpc/protoc-gen-connect-es": "^1.6.1",
+    "@types/node": "^22.7.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/three": "^0.160.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^15.0.3",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.0"
+  },
+  "packageManager": "pnpm@9.12.0"
+}

@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --------------------------------------------------------------------------
+   Ink-green CSS variables. Kept in sync with
+   `packages/ui/src/theme/tokens.ts` via `packages/ui/src/theme/css.ts`.
+   Duplicated inline here (rather than imported at runtime) because Tailwind
+   needs a static :root block at build time.
+   -------------------------------------------------------------------------- */
+:root {
+  --color-ink-900: #0A1F18;
+  --color-ink-800: #0F2A20;
+  --color-ink-700: #163B2D;
+  --color-moss-500: #2F6E55;
+  --color-moss-300: #6FAE8E;
+  --color-bone-100: #EDE7D9;
+  --color-bone-300: #CFC7B4;
+  --color-stone-500: #6F7A6E;
+
+  --color-background: #0A1F18;
+  --color-surface: #0F2A20;
+  --color-surface-hover: #163B2D;
+  --color-primary: #2F6E55;
+  --color-accent: #6FAE8E;
+  --color-foreground: #EDE7D9;
+  --color-muted-foreground: #CFC7B4;
+  --color-border: #6F7A6E;
+  --color-focus-ring: #6FAE8E;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  --duration-hover: 160ms;
+  --duration-transition: 240ms;
+  --ease-out: cubic-bezier(0.0, 0.0, 0.2, 1);
+  --ease-transition: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+html,
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    transition-duration: 0ms !important;
+  }
+}
