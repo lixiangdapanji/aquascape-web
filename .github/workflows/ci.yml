@@ -4,47 +4,22 @@ on:
   push:
     branches: [main]
 
-# NOTE: full CI (install + typecheck + build) is blocked until the
-# private @aquascape/{ui,render,botany} packages are published to
-# GitHub Packages. Those packages' repos (aquascape-ui, aquascape-render,
-# aquascape-botany) each have their own publish.yml which pushes to
-# https://npm.pkg.github.com/ on push-to-main. Once those have run at
-# least once, replace this shape-only job with the real `full` job below.
-
 jobs:
-  shape:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Validate package.json
-        run: node -e "JSON.parse(require('fs').readFileSync('package.json'))"
-      - name: Validate tsconfig.json
-        run: node -e "JSON.parse(require('fs').readFileSync('tsconfig.json').toString().replace(/\/\/.*$/gm, '').replace(/,(\s*[}\]])/g, '\$1'))"
-      - name: ok
-        run: echo "shape check ok — see ci.yml comments for how to upgrade to full CI"
-
-  # Uncomment and rename to `full:` once @aquascape/{ui,render,botany}
-  # are published to GitHub Packages.
-  #
-  # full:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: pnpm/action-setup@v4
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: "22"
-  #     - name: Configure GitHub Packages auth
-  #       run: |
-  #         echo "@aquascape:registry=https://npm.pkg.github.com/" >> .npmrc
-  #         echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
-  #     - name: Fetch aquascape-proto
-  #       run: git clone --depth 1 https://github.com/lixiangdapanji/aquascape-proto.git proto
-  #     - run: pnpm install --no-frozen-lockfile
-  #     - run: pnpm buf:generate
-  #     - run: pnpm typecheck
-  #     - run: pnpm lint
-  #     - run: pnpm build
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@aquascape"
+      - run: pnpm install --no-frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: pnpm typecheck
+      - run: pnpm build
