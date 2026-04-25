@@ -9,4 +9,4 @@ RUN groupadd --system --gid 1001 nodejs \
 COPY --chown=nextjs:nodejs . .
 USER nextjs
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["node_modules/.bin/next", "start"]

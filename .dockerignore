@@ -1,0 +1,11 @@
+.git
+.gitignore
+*.md
+README*
+.env*
+.next/cache
+node_modules/.cache
+Dockerfile*
+.dockerignore
+.github
+buf.gen.yaml
