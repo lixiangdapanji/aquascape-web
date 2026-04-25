@@ -67,3 +67,59 @@ jobs:
         working-directory: web
         env:
           NEXT_TELEMETRY_DISABLED: "1"
+
+      - name: Prepare Docker context
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p docker-ctx/.next
+          cp -r web/.next/standalone/. docker-ctx/
+          cp -r web/.next/static docker-ctx/.next/static
+          cp -r web/public docker-ctx/public
+          cp web/Dockerfile.ci docker-ctx/Dockerfile
+
+      - name: Upload Docker context
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-ctx
+          path: docker-ctx/
+          retention-days: 1
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_DEV }}
+          aws-region: us-east-1
+
+      - name: Login to ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Download Docker context
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-ctx
+          path: docker-ctx/
+
+      - name: Build and push image
+        run: |
+          IMAGE_URI=063418083301.dkr.ecr.us-east-1.amazonaws.com/aquascape-web-dev
+          docker build -t "$IMAGE_URI:${{ github.sha }}" -t "$IMAGE_URI:latest" docker-ctx/
+          docker push "$IMAGE_URI:${{ github.sha }}"
+          docker push "$IMAGE_URI:latest"
+
+      - name: Update ECS service
+        run: |
+          aws ecs update-service \
+            --cluster aquascape-dev \
+            --service aquascape-web-dev \
+            --force-new-deployment \
+            --region us-east-1
