@@ -117,10 +117,27 @@ jobs:
           docker push "$IMAGE_URI:${{ github.sha }}"
           docker push "$IMAGE_URI:latest"
 
-      - name: Update ECS service
+      - name: Update ECS task definition and deploy
         run: |
+          IMAGE_URI=063418083301.dkr.ecr.us-east-1.amazonaws.com/aquascape-web-dev
+          # Build a new task definition revision: swap image, drop the nginx command override.
+          NEW_TASK_DEF=$(aws ecs describe-task-definition \
+              --task-definition aquascape-web-dev \
+              --region us-east-1 \
+              --query 'taskDefinition' --output json | \
+            jq --arg IMG "$IMAGE_URI:${{ github.sha }}" '
+              del(.taskDefinitionArn,.revision,.status,.requiresAttributes,
+                  .placementConstraints,.compatibilities,.registeredAt,.registeredBy) |
+              .containerDefinitions[0].image = $IMG |
+              del(.containerDefinitions[0].command)
+            ')
+          NEW_ARN=$(aws ecs register-task-definition \
+            --cli-input-json "$NEW_TASK_DEF" \
+            --region us-east-1 \
+            --query 'taskDefinition.taskDefinitionArn' --output text)
           aws ecs update-service \
             --cluster aquascape-dev \
             --service aquascape-web-dev \
+            --task-definition "$NEW_ARN" \
             --force-new-deployment \
             --region us-east-1
