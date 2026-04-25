@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { ThemeProvider } from '@aquascape/ui/theme';
+import { ThemeProvider } from '@aquascape-studio/ui/theme';
 import './globals.css';
 
 export const metadata: Metadata = {

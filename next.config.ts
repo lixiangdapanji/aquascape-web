@@ -11,7 +11,7 @@ import type { NextConfig } from 'next';
  */
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@aquascape/ui', '@aquascape/data', '@aquascape/render'],
+  transpilePackages: ['@aquascape-studio/ui', '@aquascape-studio/botany', '@aquascape-studio/render'],
   output: 'standalone',
   experimental: {
     // Next 15 + React 19 compiler — leave off for now; enable once stable.

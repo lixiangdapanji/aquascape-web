@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss';
-import { tailwindTheme } from '@aquascape/ui/theme/tailwind';
+import { tailwindTheme } from '@aquascape-studio/ui/theme/tailwind';
 
 /**
  * Tailwind config derived from the ink-green tokens.
@@ -13,7 +13,7 @@ const config: Config = {
     './app/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './lib/**/*.{ts,tsx}',
-    './node_modules/@aquascape/ui/dist/**/*.{js,mjs}',
+    './node_modules/@aquascape-studio/ui/dist/**/*.{js,mjs}',
   ],
   theme: {
     colors: tailwindTheme.colors,

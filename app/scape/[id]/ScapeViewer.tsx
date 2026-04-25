@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { Lighting, Tank, WaterVolume } from '@aquascape/render';
+import { Lighting, Tank, WaterVolume } from '@aquascape-studio/render';
 
 /**
  * Client-only wrapper for the 3D canvas.

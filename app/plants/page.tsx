@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { plants } from '@aquascape/botany';
+import { plants } from '@aquascape-studio/botany';
 
 /**
  * Plants catalog — SSR list of every species from @aquascape/data.
