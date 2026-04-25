@@ -89,6 +89,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
+    environment: dev
     permissions:
       id-token: write
       contents: read
