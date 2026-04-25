@@ -23,6 +23,8 @@ export function ScapeViewer() {
         gl={{ antialias: true, alpha: false }}
         dpr={[1, 2]}
       >
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-expect-error — r3f color element not in JSX.IntrinsicElements yet */}
         <color attach="background" args={['#0A1F18']} />
         <Lighting sizeCm={tankSizeCm} />
         <Tank sizeCm={tankSizeCm} />

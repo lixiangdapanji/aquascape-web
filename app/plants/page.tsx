@@ -37,7 +37,7 @@ export default function PlantsPage() {
                   {chinese ? ` · ${chinese}` : ''}
                 </span>
                 <span className="mt-2 text-xs uppercase tracking-wide text-moss-300">
-                  {p.difficulty.label} · {p.growthForm}
+                  {p.difficultyLabel} · {p.growthForm}
                 </span>
               </div>
             </li>

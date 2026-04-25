@@ -18,7 +18,8 @@ const config: Config = {
   theme: {
     colors: tailwindTheme.colors,
     borderRadius: tailwindTheme.borderRadius,
-    fontFamily: tailwindTheme.fontFamily,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    fontFamily: tailwindTheme.fontFamily as any,
     extend: {
       spacing: tailwindTheme.spacing,
       fontSize: tailwindTheme.fontSize,
