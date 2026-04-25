@@ -14,7 +14,10 @@ const nextConfig: NextConfig = {
   transpilePackages: ['@aquascape-studio/ui', '@aquascape-studio/botany', '@aquascape-studio/render'],
   output: 'standalone',
   experimental: {
-    // Next 15 + React 19 compiler — leave off for now; enable once stable.
+    // styled-jsx is not auto-traced in standalone builds; include it explicitly.
+    outputFileTracingIncludes: {
+      '/**': ['./node_modules/styled-jsx/**/*'],
+    },
   },
 };
 
