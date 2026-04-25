@@ -7,19 +7,63 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: web
+
+      - uses: actions/checkout@v4
+        with:
+          repository: aquascape-studio/aquascape-botany
+          path: botany
+
+      - uses: actions/checkout@v4
+        with:
+          repository: aquascape-studio/aquascape-ui
+          path: ui
+
+      - uses: actions/checkout@v4
+        with:
+          repository: aquascape-studio/aquascape-render
+          path: render
+
       - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: web/package.json
+
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          registry-url: "https://npm.pkg.github.com"
-          scope: "@aquascape-studio"
-      - run: pnpm install --no-frozen-lockfile
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build @aquascape-studio/botany
+        working-directory: botany/js
+        run: pnpm install --no-frozen-lockfile && pnpm build
+
+      - name: Build @aquascape-studio/ui
+        working-directory: ui
+        run: pnpm install --no-frozen-lockfile && pnpm build
+
+      - name: Build @aquascape-studio/render
+        working-directory: render
+        run: pnpm install --no-frozen-lockfile && pnpm build
+
+      - name: Wire local packages into web
+        working-directory: web
+        run: |
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json'));
+            pkg.dependencies['@aquascape-studio/botany'] = 'file:../botany/js';
+            pkg.dependencies['@aquascape-studio/ui'] = 'file:../ui';
+            pkg.dependencies['@aquascape-studio/render'] = 'file:../render';
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+          "
+          pnpm install --no-frozen-lockfile
+
       - run: pnpm typecheck
+        working-directory: web
+
       - run: pnpm build
+        working-directory: web
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
