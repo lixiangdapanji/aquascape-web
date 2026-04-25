@@ -74,22 +74,11 @@ jobs:
       - name: Prepare Docker context
         if: github.ref == 'refs/heads/main'
         run: |
-          mkdir -p docker-ctx/.next docker-ctx/node_modules
+          mkdir -p docker-ctx/.next
           cp -r web/.next/standalone/. docker-ctx/
           cp -r web/.next/static docker-ctx/.next/static
           cp -r web/public docker-ctx/public
           cp web/Dockerfile.ci docker-ctx/Dockerfile
-          # styled-jsx is required at runtime by Next.js require-hook but not always traced
-          # by nft. Find it wherever pnpm put it and copy into the Docker context.
-          STYLED_JSX=$(find web/node_modules -maxdepth 5 -name "package.json" \
-            -path "*/styled-jsx/package.json" | head -1 | xargs -I{} dirname {})
-          if [ -n "$STYLED_JSX" ]; then
-            echo "Copying styled-jsx from $STYLED_JSX"
-            cp -r "$STYLED_JSX" docker-ctx/node_modules/styled-jsx
-          else
-            echo "WARNING: styled-jsx not found in node_modules"
-            ls docker-ctx/node_modules/ | grep styled || true
-          fi
 
       - name: Upload Docker context
         if: github.ref == 'refs/heads/main'
