@@ -74,11 +74,13 @@ jobs:
       - name: Prepare Docker context
         if: github.ref == 'refs/heads/main'
         run: |
-          mkdir -p docker-ctx/.next
+          mkdir -p docker-ctx/.next docker-ctx/node_modules
           cp -r web/.next/standalone/. docker-ctx/
           cp -r web/.next/static docker-ctx/.next/static
           cp -r web/public docker-ctx/public
           cp web/Dockerfile.ci docker-ctx/Dockerfile
+          # styled-jsx is required at runtime by Next.js require-hook but not always traced.
+          cp -r web/node_modules/styled-jsx docker-ctx/node_modules/styled-jsx
 
       - name: Upload Docker context
         if: github.ref == 'refs/heads/main'
