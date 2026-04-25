@@ -74,11 +74,16 @@ jobs:
       - name: Prepare Docker context
         if: github.ref == 'refs/heads/main'
         run: |
+          echo "=== standalone structure ===" && ls web/.next/standalone/ 2>/dev/null || echo "NOT FOUND"
+          echo "=== standalone/.next ===" && ls web/.next/standalone/.next/ 2>/dev/null || echo "NOT FOUND"
+          echo "=== BUILD_ID ===" && cat web/.next/standalone/.next/BUILD_ID 2>/dev/null || echo "NOT FOUND"
           mkdir -p docker-ctx/.next
-          cp -r web/.next/standalone/. docker-ctx/
+          cp -rL web/.next/standalone/. docker-ctx/
           cp -r web/.next/static docker-ctx/.next/static
           cp -r web/public docker-ctx/public
           cp web/Dockerfile.ci docker-ctx/Dockerfile
+          echo "=== docker-ctx/.next ===" && ls docker-ctx/.next/ | head -10
+          echo "=== docker-ctx/.next/BUILD_ID ===" && cat docker-ctx/.next/BUILD_ID 2>/dev/null || echo "NOT FOUND"
 
       - name: Upload Docker context
         if: github.ref == 'refs/heads/main'
