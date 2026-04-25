@@ -137,7 +137,8 @@ jobs:
               del(.taskDefinitionArn,.revision,.status,.requiresAttributes,
                   .placementConstraints,.compatibilities,.registeredAt,.registeredBy) |
               .containerDefinitions[0].image = $IMG |
-              del(.containerDefinitions[0].command)
+              del(.containerDefinitions[0].command) |
+              (.containerDefinitions[0].environment[] | select(.name == "NODE_ENV")).value = "production"
             ')
           NEW_ARN=$(aws ecs register-task-definition \
             --cli-input-json "$NEW_TASK_DEF" \
