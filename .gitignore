@@ -6,4 +6,4 @@ out/
 .env.local
 pnpm-lock.yaml
 lib/_gen/
-.npmrc
+
