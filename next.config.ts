@@ -13,12 +13,11 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ['@aquascape-studio/ui', '@aquascape-studio/botany', '@aquascape-studio/render'],
   output: 'standalone',
-  experimental: {
-    // styled-jsx is not auto-traced in standalone builds; include it explicitly.
-    outputFileTracingIncludes: {
-      '/**': ['./node_modules/styled-jsx/**/*'],
-    },
+  // styled-jsx is not auto-traced in standalone builds; include it explicitly.
+  outputFileTracingIncludes: {
+    '/**': ['./node_modules/styled-jsx/**/*'],
   },
+  experimental: {},
 };
 
 export default nextConfig;
