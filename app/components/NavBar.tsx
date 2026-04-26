@@ -1,6 +1,11 @@
 import Link from "next/link"
 import { auth, signOut } from "@/auth"
 
+const NAV_LINKS = [
+  { label: "Plants", href: "/plants" },
+  { label: "Studio", href: "/studio" },
+]
+
 export default async function NavBar() {
   const session = await auth()
 
@@ -9,6 +14,7 @@ export default async function NavBar() {
       className="flex items-center justify-between px-6 py-4 border-b"
       style={{ backgroundColor: '#0F2A20', borderColor: '#1E3A2E' }}
     >
+      {/* Logo */}
       <Link
         href="/"
         className="text-lg font-semibold tracking-tight"
@@ -17,6 +23,21 @@ export default async function NavBar() {
         Aquascape Studio
       </Link>
 
+      {/* Nav links — hidden on mobile */}
+      <div className="hidden md:flex items-center gap-6">
+        {NAV_LINKS.map(({ label, href }) => (
+          <Link
+            key={href}
+            href={href}
+            className="text-sm font-medium transition-colors hover:text-moss-300"
+            style={{ color: '#8FAF9A' }}
+          >
+            {label}
+          </Link>
+        ))}
+      </div>
+
+      {/* Auth section */}
       <div className="flex items-center gap-4">
         {session?.user ? (
           <>
@@ -29,7 +50,7 @@ export default async function NavBar() {
                   referrerPolicy="no-referrer"
                 />
               )}
-              <span className="text-sm" style={{ color: '#EDE7D9' }}>
+              <span className="text-sm hidden sm:inline" style={{ color: '#EDE7D9' }}>
                 {session.user.name}
               </span>
             </div>
@@ -41,7 +62,7 @@ export default async function NavBar() {
             >
               <button
                 type="submit"
-                className="rounded-md px-3 py-1.5 text-sm transition-colors"
+                className="rounded-md px-3 py-1.5 text-sm transition-colors hover:opacity-80"
                 style={{ backgroundColor: '#1E3A2E', color: '#8FAF9A' }}
               >
                 Sign out
@@ -51,7 +72,7 @@ export default async function NavBar() {
         ) : (
           <Link
             href="/login"
-            className="rounded-md px-3 py-1.5 text-sm transition-colors"
+            className="rounded-md px-3 py-1.5 text-sm transition-colors hover:opacity-80"
             style={{ backgroundColor: '#1E3A2E', color: '#8FAF9A' }}
           >
             Sign in
