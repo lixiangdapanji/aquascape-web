@@ -6,6 +6,11 @@ const nextConfig = {
   outputFileTracingIncludes: {
     '/**': ['./node_modules/styled-jsx/**/*'],
   },
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'upload.wikimedia.org' },
+    ],
+  },
 };
 
 module.exports = nextConfig;

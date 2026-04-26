@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import type { Plant } from './page';
 
 const difficultyColor: Record<Plant['difficulty'], string> = {
@@ -10,37 +11,61 @@ const difficultyColor: Record<Plant['difficulty'], string> = {
 };
 
 function PlantCard({ plant }: { plant: Plant }) {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div
-      className="flex flex-col gap-2 rounded-md p-4 transition-colors"
+      className="flex flex-col rounded-md overflow-hidden transition-colors"
       style={{
         backgroundColor: '#0F2A20',
         border: '1px solid rgba(111, 122, 110, 0.4)',
       }}
     >
-      <div className="flex items-start justify-between gap-2">
-        <span className="font-semibold" style={{ color: '#EDE7D9' }}>
-          {plant.name}
-        </span>
-        <span
-          className="shrink-0 rounded px-1.5 py-0.5 text-xs font-medium"
+      {imgError ? (
+        <div
+          className="w-full h-44 flex items-center justify-center"
           style={{
-            backgroundColor: 'rgba(111, 122, 110, 0.2)',
-            color: difficultyColor[plant.difficulty],
+            background: 'linear-gradient(135deg, #155724, #6FAE8E)',
           }}
         >
-          {plant.difficulty}
+          <span className="text-4xl font-bold text-white">{plant.name[0]}</span>
+        </div>
+      ) : (
+        <Image
+          src={plant.image}
+          alt={plant.name}
+          width={320}
+          height={180}
+          className="w-full h-44 object-cover rounded-t-lg"
+          unoptimized
+          onError={() => setImgError(true)}
+        />
+      )}
+      <div className="flex flex-col gap-2 p-4">
+        <div className="flex items-start justify-between gap-2">
+          <span className="font-semibold" style={{ color: '#EDE7D9' }}>
+            {plant.name}
+          </span>
+          <span
+            className="shrink-0 rounded px-1.5 py-0.5 text-xs font-medium"
+            style={{
+              backgroundColor: 'rgba(111, 122, 110, 0.2)',
+              color: difficultyColor[plant.difficulty],
+            }}
+          >
+            {plant.difficulty}
+          </span>
+        </div>
+        <span className="text-sm italic" style={{ color: '#CFC7B4' }}>
+          {plant.scientificName}
         </span>
-      </div>
-      <span className="text-sm italic" style={{ color: '#CFC7B4' }}>
-        {plant.scientificName}
-      </span>
-      <div className="mt-1 flex flex-wrap gap-2 text-xs" style={{ color: '#6FAE8E' }}>
-        <span>{plant.type}</span>
-        <span>·</span>
-        <span>{plant.lightRequirement} light</span>
-        <span>·</span>
-        <span>{plant.co2Required ? 'CO₂ required' : 'No CO₂'}</span>
+        <div className="mt-1 flex flex-wrap gap-2 text-xs" style={{ color: '#6FAE8E' }}>
+          <span>{plant.type}</span>
+          <span>·</span>
+          <span>{plant.lightRequirement} light</span>
+          <span>·</span>
+          <span>{plant.co2Required ? 'CO₂ required' : 'No CO₂'}</span>
+        </div>
       </div>
     </div>
   );
