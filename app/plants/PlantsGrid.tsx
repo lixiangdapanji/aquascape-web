@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import type { Plant } from './page';
 
 const difficultyColor: Record<Plant['difficulty'], string> = {
@@ -24,20 +23,18 @@ function PlantCard({ plant }: { plant: Plant }) {
       {imgError ? (
         <div
           className="w-full h-44 flex items-center justify-center"
-          style={{
-            background: 'linear-gradient(135deg, #155724, #6FAE8E)',
-          }}
+          style={{ background: 'linear-gradient(135deg, #155724, #6FAE8E)' }}
         >
           <span className="text-4xl font-bold text-white">{plant.name[0]}</span>
         </div>
       ) : (
-        <Image
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
           src={plant.image}
           alt={plant.name}
           width={320}
           height={180}
-          className="w-full h-44 object-cover rounded-t-lg"
-          unoptimized
+          className="w-full h-44 object-cover"
           onError={() => setImgError(true)}
         />
       )}
