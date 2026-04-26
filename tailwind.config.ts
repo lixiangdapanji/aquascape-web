@@ -1,31 +1,47 @@
 import type { Config } from 'tailwindcss';
-import { tailwindTheme } from '@aquascape-studio/ui/theme/tailwind';
 
 /**
- * Tailwind config derived from the ink-green tokens.
+ * Tailwind config using inline ink-green design tokens.
  *
- * We don't redefine colors here. All palette, spacing, radius, font, and
- * motion values come from `@aquascape/ui/theme/tailwind`, which is generated
- * from `packages/ui/src/theme/tokens.ts`.
+ * Will be replaced by `@aquascape-studio/ui/theme/tailwind` once that package
+ * is published and stable. Tokens are kept in sync with globals.css.
  */
 const config: Config = {
   content: [
     './app/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './lib/**/*.{ts,tsx}',
-    './node_modules/@aquascape-studio/ui/dist/**/*.{js,mjs}',
   ],
   theme: {
-    colors: tailwindTheme.colors,
-    borderRadius: tailwindTheme.borderRadius,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    fontFamily: tailwindTheme.fontFamily as any,
     extend: {
-      spacing: tailwindTheme.spacing,
-      fontSize: tailwindTheme.fontSize,
-      lineHeight: tailwindTheme.lineHeight,
-      transitionDuration: tailwindTheme.transitionDuration,
-      transitionTimingFunction: tailwindTheme.transitionTimingFunction,
+      colors: {
+        'ink-900': '#0A1F18',
+        'ink-800': '#0F2A20',
+        'ink-700': '#163B2D',
+        'moss-500': '#2F6E55',
+        'moss-300': '#6FAE8E',
+        'bone-100': '#EDE7D9',
+        'bone-300': '#CFC7B4',
+        'stone-500': '#6F7A6E',
+        background: '#0A1F18',
+        surface: '#0F2A20',
+        'surface-hover': '#163B2D',
+        primary: '#2F6E55',
+        accent: '#6FAE8E',
+        foreground: '#EDE7D9',
+        'muted-foreground': '#CFC7B4',
+        border: '#6F7A6E',
+        'focus-ring': '#6FAE8E',
+      },
+      borderRadius: {
+        sm: '4px',
+        md: '8px',
+        lg: '16px',
+      },
+      transitionDuration: {
+        hover: '160ms',
+        transition: '240ms',
+      },
     },
   },
   plugins: [],

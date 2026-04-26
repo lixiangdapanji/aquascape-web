@@ -1,49 +1,171 @@
 import Link from 'next/link';
-import { plants } from '@aquascape-studio/botany';
+import { PlantsGrid } from './PlantsGrid';
 
-/**
- * Plants catalog — SSR list of every species from @aquascape/data.
- *
- * Bilingual display (scientific + English + Chinese common name). Phase 1
- * has no client-side filtering; that arrives with the search input.
- */
+export const metadata = {
+  title: 'Plants — Aquascape Studio',
+};
+
+export interface Plant {
+  id: string;
+  name: string;
+  scientificName: string;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  type: 'Stem' | 'Rosette' | 'Moss' | 'Fern' | 'Bulb' | 'Floating';
+  lightRequirement: 'Low' | 'Medium' | 'High';
+  co2Required: boolean;
+}
+
+const PLANTS: Plant[] = [
+  {
+    id: 'java-moss',
+    name: 'Java Moss',
+    scientificName: 'Taxiphyllum barbieri',
+    difficulty: 'Easy',
+    type: 'Moss',
+    lightRequirement: 'Low',
+    co2Required: false,
+  },
+  {
+    id: 'java-fern',
+    name: 'Java Fern',
+    scientificName: 'Microsorum pteropus',
+    difficulty: 'Easy',
+    type: 'Fern',
+    lightRequirement: 'Low',
+    co2Required: false,
+  },
+  {
+    id: 'anubias-barteri',
+    name: 'Anubias',
+    scientificName: 'Anubias barteri',
+    difficulty: 'Easy',
+    type: 'Rosette',
+    lightRequirement: 'Low',
+    co2Required: false,
+  },
+  {
+    id: 'amazon-sword',
+    name: 'Amazon Sword',
+    scientificName: 'Echinodorus grisebachii',
+    difficulty: 'Easy',
+    type: 'Rosette',
+    lightRequirement: 'Medium',
+    co2Required: false,
+  },
+  {
+    id: 'rotala-rotundifolia',
+    name: 'Rotala',
+    scientificName: 'Rotala rotundifolia',
+    difficulty: 'Medium',
+    type: 'Stem',
+    lightRequirement: 'Medium',
+    co2Required: false,
+  },
+  {
+    id: 'ludwigia-repens',
+    name: 'Ludwigia',
+    scientificName: 'Ludwigia repens',
+    difficulty: 'Easy',
+    type: 'Stem',
+    lightRequirement: 'Medium',
+    co2Required: false,
+  },
+  {
+    id: 'dwarf-hairgrass',
+    name: 'Dwarf Hairgrass',
+    scientificName: 'Eleocharis parvula',
+    difficulty: 'Medium',
+    type: 'Rosette',
+    lightRequirement: 'High',
+    co2Required: true,
+  },
+  {
+    id: 'monte-carlo',
+    name: 'Monte Carlo',
+    scientificName: 'Micranthemum tweediei',
+    difficulty: 'Medium',
+    type: 'Stem',
+    lightRequirement: 'High',
+    co2Required: true,
+  },
+  {
+    id: 'hc-cuba',
+    name: 'HC Cuba',
+    scientificName: 'Hemianthus callitrichoides',
+    difficulty: 'Hard',
+    type: 'Stem',
+    lightRequirement: 'High',
+    co2Required: true,
+  },
+  {
+    id: 'glossostigma',
+    name: 'Glossostigma',
+    scientificName: 'Glossostigma elatinoides',
+    difficulty: 'Hard',
+    type: 'Stem',
+    lightRequirement: 'High',
+    co2Required: true,
+  },
+  {
+    id: 'cryptocoryne-wendtii',
+    name: 'Cryptocoryne Wendtii',
+    scientificName: 'Cryptocoryne wendtii',
+    difficulty: 'Easy',
+    type: 'Rosette',
+    lightRequirement: 'Low',
+    co2Required: false,
+  },
+  {
+    id: 'vallisneria',
+    name: 'Vallisneria',
+    scientificName: 'Vallisneria spiralis',
+    difficulty: 'Easy',
+    type: 'Rosette',
+    lightRequirement: 'Medium',
+    co2Required: false,
+  },
+  {
+    id: 'hornwort',
+    name: 'Hornwort',
+    scientificName: 'Ceratophyllum demersum',
+    difficulty: 'Easy',
+    type: 'Stem',
+    lightRequirement: 'Low',
+    co2Required: false,
+  },
+  {
+    id: 'water-wisteria',
+    name: 'Water Wisteria',
+    scientificName: 'Hygrophila difformis',
+    difficulty: 'Easy',
+    type: 'Stem',
+    lightRequirement: 'Medium',
+    co2Required: false,
+  },
+  {
+    id: 'aponogeton-ulvaceus',
+    name: 'Aponogeton',
+    scientificName: 'Aponogeton ulvaceus',
+    difficulty: 'Medium',
+    type: 'Bulb',
+    lightRequirement: 'Medium',
+    co2Required: false,
+  },
+];
+
 export default function PlantsPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-5xl flex-col px-6 py-10">
       <header className="mb-8 flex items-baseline justify-between">
-        <h1 className="font-serif text-3xl text-bone-100">Plants</h1>
-        <Link href="/" className="text-sm text-bone-300 hover:text-bone-100">
+        <h1 className="text-3xl font-bold" style={{ color: '#EDE7D9' }}>
+          Plants
+        </h1>
+        <Link href="/" style={{ color: '#CFC7B4', fontSize: '0.875rem' }}>
           Home
         </Link>
       </header>
 
-      <p className="mb-6 text-sm text-muted-foreground">
-        {plants.length} species. Tap any entry to see care notes, envelopes,
-        and growth coefficients.
-      </p>
-
-      <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        {plants.map((p) => {
-          const english = p.commonNames.en[0] ?? p.scientificName;
-          const chinese = p.commonNames.zh[0] ?? '';
-          return (
-            <li key={p.id}>
-              <div className="group flex flex-col gap-1 rounded-md border border-border/40 bg-surface p-4 transition-colors duration-transition ease-transition hover:bg-surface-hover">
-                <span className="font-serif text-lg text-bone-100">
-                  {english}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  {p.scientificName}
-                  {chinese ? ` · ${chinese}` : ''}
-                </span>
-                <span className="mt-2 text-xs uppercase tracking-wide text-moss-300">
-                  {p.difficultyLabel} · {p.growthForm}
-                </span>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+      <PlantsGrid plants={PLANTS} />
     </main>
   );
 }

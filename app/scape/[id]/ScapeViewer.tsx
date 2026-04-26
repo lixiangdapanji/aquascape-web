@@ -1,35 +1,20 @@
 'use client';
 
-import { Canvas } from '@react-three/fiber';
-import { Lighting, Tank, WaterVolume } from '@aquascape-studio/render';
-
 /**
  * Client-only wrapper for the 3D canvas.
  *
- * Keeps the React Three Fiber tree out of the RSC boundary — @react-three/fiber
- * relies on a DOM and a WebGL context, both unavailable at server render time.
- *
- * The scene itself is currently the Phase-1 primitives exported from
- * @aquascape/render (Tank, Lighting, WaterVolume). The full <Aquarium>
- * composition will drop in here once render-agent publishes it.
+ * Phase 1 stub — @aquascape-studio/render is not yet published.
+ * The full <Aquarium> composition will drop in here once render-agent ships it.
  */
 export function ScapeViewer() {
-  const tankSizeCm: [number, number, number] = [60, 30, 36];
-
   return (
-    <div className="aspect-video w-full bg-ink-900">
-      <Canvas
-        camera={{ position: [60, 40, 70], fov: 35 }}
-        gl={{ antialias: true, alpha: false }}
-        dpr={[1, 2]}
-      >
-        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-        {/* @ts-expect-error — r3f color element not in JSX.IntrinsicElements yet */}
-        <color attach="background" args={['#0A1F18']} />
-        <Lighting sizeCm={tankSizeCm} />
-        <Tank sizeCm={tankSizeCm} />
-        <WaterVolume sizeCm={tankSizeCm} />
-      </Canvas>
+    <div
+      className="aspect-video w-full flex items-center justify-center"
+      style={{ backgroundColor: '#0A1F18' }}
+    >
+      <p style={{ color: '#CFC7B4', fontSize: '0.875rem' }}>
+        3D viewer coming soon.
+      </p>
     </div>
   );
 }

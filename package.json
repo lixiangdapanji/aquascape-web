@@ -13,17 +13,12 @@
     "buf:generate": "buf generate"
   },
   "dependencies": {
-    "@aquascape-studio/botany": "^0.1.0",
-    "@aquascape-studio/render": "^0.1.0",
-    "@aquascape-studio/ui": "^0.1.0",
     "@bufbuild/protobuf": "^2.2.0",
     "@connectrpc/connect": "^2.0.0",
     "@connectrpc/connect-web": "^2.0.0",
-    "@react-three/fiber": "^8.17.10",
     "next": "^15.0.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "three": "^0.160.1"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@bufbuild/buf": "^1.45.0",
@@ -32,7 +27,6 @@
     "@types/node": "^22.7.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@types/three": "^0.160.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.0.3",
