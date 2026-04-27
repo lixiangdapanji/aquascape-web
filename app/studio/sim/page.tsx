@@ -154,7 +154,8 @@ function GrowthChart({
 }
 
 function SimContent() {
-  const params = useSearchParams()
+  const searchParams = useSearchParams()
+  const params = searchParams
   const router = useRouter()
 
   const name = params.get("name") ?? "My Aquascape"
@@ -191,6 +192,13 @@ function SimContent() {
 
       <div className="mb-6 flex items-baseline justify-between">
         <h1 className="text-2xl font-bold" style={{ color: TEXT }}>生长模拟</h1>
+        <button
+          onClick={() => router.push(`/studio/scene?${params.toString()}`)}
+          className="text-sm px-3 py-1.5 rounded-lg transition-opacity hover:opacity-80"
+          style={{ backgroundColor: ACCENT, color: TEXT }}
+        >
+          🌿 3D 预览
+        </button>
         <button
           onClick={() => router.push("/studio/new")}
           className="text-sm px-3 py-1.5 rounded-lg transition-opacity hover:opacity-70"

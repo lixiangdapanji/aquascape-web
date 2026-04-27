@@ -77,7 +77,7 @@ export default function NewTankPage() {
       light,
       plants: JSON.stringify(selected),
     })
-    router.push(`/studio/sim?${params.toString()}`)
+    router.push(`/studio/scene?${params.toString()}`)
   }
 
   const plantCount = Object.keys(selected).length
