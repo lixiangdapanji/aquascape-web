@@ -55,14 +55,14 @@ export default async function StudioPage() {
           icon="🌿"
           title="新建水草缸"
           desc="从空白缸开始设计"
-          href="#"
+          href="/studio/new"
           primary
         />
         <ActionCard
           icon="🔬"
           title="运行模拟"
           desc="模拟植物30天生长曲线"
-          href="#"
+          href="/studio/sim"
         />
         <ActionCard
           icon="📚"
@@ -147,7 +147,7 @@ function EmptyScapes({ loggedIn }: { loggedIn: boolean }) {
       </p>
       {loggedIn ? (
         <Link
-          href="#"
+          href="/studio/new"
           className="rounded-lg px-4 py-2 text-sm font-medium transition-opacity hover:opacity-80"
           style={{ backgroundColor: ACCENT, color: TEXT }}
         >
