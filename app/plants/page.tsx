@@ -28,6 +28,7 @@ interface PlantDef {
   co2Required: boolean;
   growthForm: GrowthForm;
   colorHex: string;
+  inatQuery?: string; // override when iNaturalist uses a different name
 }
 
 const PLANT_DEFS: PlantDef[] = [
@@ -38,7 +39,7 @@ const PLANT_DEFS: PlantDef[] = [
   { id: 'rotala-rotundifolia',  name: 'Rotala',               scientificName: 'Rotala rotundifolia',        difficulty: 'Medium', type: 'Stem',      lightRequirement: 'Medium', co2Required: false, growthForm: 'stem',      colorHex: '#d37a9a' },
   { id: 'ludwigia-repens',      name: 'Ludwigia',             scientificName: 'Ludwigia repens',            difficulty: 'Easy',   type: 'Stem',      lightRequirement: 'Medium', co2Required: false, growthForm: 'stem',      colorHex: '#c0514a' },
   { id: 'dwarf-hairgrass',      name: 'Dwarf Hairgrass',      scientificName: 'Eleocharis parvula',         difficulty: 'Medium', type: 'Rosette',   lightRequirement: 'High',   co2Required: true,  growthForm: 'carpeting', colorHex: '#5ea03b' },
-  { id: 'monte-carlo',          name: 'Monte Carlo',          scientificName: 'Micranthemum tweediei',      difficulty: 'Medium', type: 'Carpeting', lightRequirement: 'High',   co2Required: true,  growthForm: 'carpeting', colorHex: '#8fc25a' },
+  { id: 'monte-carlo',          name: 'Monte Carlo',          scientificName: 'Micranthemum tweediei',      difficulty: 'Medium', type: 'Carpeting', lightRequirement: 'High',   co2Required: true,  growthForm: 'carpeting', colorHex: '#8fc25a', inatQuery: 'Micranthemum umbrosum' },
   { id: 'hc-cuba',              name: 'HC Cuba',              scientificName: 'Hemianthus callitrichoides', difficulty: 'Hard',   type: 'Carpeting', lightRequirement: 'High',   co2Required: true,  growthForm: 'carpeting', colorHex: '#7ab840' },
   { id: 'glossostigma',         name: 'Glossostigma',         scientificName: 'Glossostigma elatinoides',   difficulty: 'Hard',   type: 'Carpeting', lightRequirement: 'High',   co2Required: true,  growthForm: 'carpeting', colorHex: '#7cc35a' },
   { id: 'cryptocoryne-wendtii', name: 'Cryptocoryne Wendtii', scientificName: 'Cryptocoryne wendtii',       difficulty: 'Easy',   type: 'Rosette',   lightRequirement: 'Low',    co2Required: false, growthForm: 'rosette',   colorHex: '#6b6b2e' },
@@ -51,7 +52,7 @@ const PLANT_DEFS: PlantDef[] = [
 async function fetchINatPhoto(scientificName: string): Promise<string | null> {
   try {
     const res = await fetch(
-      `https://api.inaturalist.org/v1/taxa?q=${encodeURIComponent(scientificName)}&rank=species&per_page=1&is_active=true`,
+      `https://api.inaturalist.org/v1/taxa?q=${encodeURIComponent(scientificName)}&per_page=1`,
       {
         next: { revalidate: 604800 }, // 7 days
         headers: { 'User-Agent': 'AquascapeStudio/1.0 (https://efferves.live)' },
@@ -72,7 +73,7 @@ async function fetchINatPhoto(scientificName: string): Promise<string | null> {
 
 export default async function PlantsPage() {
   const photos = await Promise.all(
-    PLANT_DEFS.map((def) => fetchINatPhoto(def.scientificName))
+    PLANT_DEFS.map((def) => fetchINatPhoto(def.inatQuery ?? def.scientificName))
   );
 
   const PLANTS: Plant[] = PLANT_DEFS.map((def, i) => ({
