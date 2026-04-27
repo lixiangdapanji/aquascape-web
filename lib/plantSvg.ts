@@ -107,22 +107,27 @@ function carpetIllustration(c: string, light: string, dark: string): string {
 
 function epiphyteIllustration(c: string, light: string, dark: string): string {
   let g = "";
-  g += `<path d="M105 ${GND} L100 ${GND - 16} L128 ${GND - 22} L162 ${GND - 20} L188 ${GND - 14} L192 ${GND} Z" fill="#0F2820" stroke="#163526" stroke-width="1"/>`;
-  const ry = GND - 13;
-  g += `<line x1="115" y1="${ry}" x2="185" y2="${ry}" stroke="${dark}" stroke-width="3" stroke-linecap="round"/>`;
-  const leafData = [
-    { x: 122, a: -78, len: 58, w: 13 }, { x: 138, a: -52, len: 74, w: 16 },
-    { x: 158, a: -86, len: 84, w: 18 }, { x: 172, a: -62, len: 68, w: 15 },
-    { x: 183, a: -38, len: 52, w: 13 },
+  // Rock — visible outline so it reads as substrate
+  g += `<path d="M88 ${GND} L86 ${GND - 18} L115 ${GND - 26} L160 ${GND - 28} L205 ${GND - 25} L224 ${GND - 16} L222 ${GND} Z" fill="#183324" stroke="#2D5A38" stroke-width="1.5"/>`;
+  // Rhizome along top of rock
+  const rz = GND - 22;
+  g += `<path d="M104 ${rz} Q160 ${rz - 4} 216 ${rz}" stroke="${dark}" stroke-width="4" stroke-linecap="round" fill="none"/>`;
+  // Leaves grow upward — angles near 0° (vertical) with slight fan spread
+  const leafData: { x: number; a: number; len: number; w: number }[] = [
+    { x: 115, a: -22, len: 78, w: 14 },
+    { x: 138, a: -10, len: 90, w: 17 },
+    { x: 160, a:   2, len: 96, w: 19 },
+    { x: 182, a:  12, len: 86, w: 16 },
+    { x: 204, a:  24, len: 72, w: 13 },
   ];
   leafData.forEach(({ x, a, len, w }, i) => {
     const rad = (a * Math.PI) / 180;
     const mx = x + Math.sin(rad) * (len / 2);
-    const my = ry - Math.cos(rad) * (len / 2);
-    const col = i === 2 ? c : light;
-    g += `<ellipse cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" rx="${w}" ry="${(len / 2).toFixed(1)}" fill="${col}" transform="rotate(${a} ${mx.toFixed(1)} ${my.toFixed(1)})"/>`;
-    const tx = x + Math.sin(rad) * len, ty = ry - Math.cos(rad) * len;
-    g += `<line x1="${x}" y1="${ry}" x2="${tx.toFixed(1)}" y2="${ty.toFixed(1)}" stroke="${dark}" stroke-width="1" opacity="0.55"/>`;
+    const my = rz - Math.cos(rad) * (len / 2);
+    const col = i === 2 ? c : i % 2 === 0 ? light : c;
+    const tx = x + Math.sin(rad) * len, ty = rz - Math.cos(rad) * len;
+    g += `<line x1="${x}" y1="${rz}" x2="${tx.toFixed(1)}" y2="${ty.toFixed(1)}" stroke="${dark}" stroke-width="1.2" opacity="0.55"/>`;
+    g += `<ellipse cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" rx="${w}" ry="${(len / 2).toFixed(1)}" fill="${col}" opacity="0.92" transform="rotate(${a} ${mx.toFixed(1)} ${my.toFixed(1)})"/>`;
   });
   return g;
 }
