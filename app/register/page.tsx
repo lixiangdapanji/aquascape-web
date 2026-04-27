@@ -11,33 +11,40 @@ const TEXT = "#EDE7D9"
 const MUTED = "#8FAF9A"
 const BTN_DARK = "#1E3A2E"
 
-function Divider({ label }: { label: string }) {
-  return (
-    <div className="flex items-center gap-3 my-5">
-      <div className="flex-1 border-t" style={{ borderColor: BORDER }} />
-      <span className="text-xs" style={{ color: MUTED }}>{label}</span>
-      <div className="flex-1 border-t" style={{ borderColor: BORDER }} />
-    </div>
-  )
-}
-
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter()
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
-  async function handleCredentials(e: FormEvent) {
+  async function handleRegister(e: FormEvent) {
     e.preventDefault()
     setError("")
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters")
+      return
+    }
     setLoading(true)
-    const res = await signIn("credentials", { email, password, redirect: false })
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password }),
+    })
+    if (!res.ok) {
+      const data = await res.json()
+      setError(data.error ?? "Registration failed")
+      setLoading(false)
+      return
+    }
+    // Auto sign-in after successful registration
+    const signInRes = await signIn("credentials", { email, password, redirect: false })
     setLoading(false)
-    if (res?.ok) {
+    if (signInRes?.ok) {
       router.push("/studio")
     } else {
-      setError("Invalid email or password")
+      router.push("/login")
     }
   }
 
@@ -49,65 +56,67 @@ export default function LoginPage() {
       >
         <div className="mb-7 text-center">
           <h1 className="text-2xl font-bold tracking-tight" style={{ color: TEXT }}>
-            Aquascape Studio
+            Create account
           </h1>
           <p className="mt-2 text-sm" style={{ color: MUTED }}>
-            Sign in to your account
+            Join Aquascape Studio
           </p>
         </div>
 
-        {/* OAuth buttons */}
-        <div className="flex flex-col gap-3">
+        {/* Quick OAuth options */}
+        <div className="flex gap-3 mb-5">
           <button
             onClick={() => signIn("google", { callbackUrl: "/studio" })}
-            className="flex w-full items-center justify-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-opacity hover:opacity-80"
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-opacity hover:opacity-80"
             style={{ backgroundColor: TEXT, color: "#0A1F18" }}
           >
             <GoogleIcon />
-            Continue with Google
+            Google
           </button>
-
           <button
             onClick={() => signIn("github", { callbackUrl: "/studio" })}
-            className="flex w-full items-center justify-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-opacity hover:opacity-80"
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-opacity hover:opacity-80"
             style={{ backgroundColor: "#24292F", color: "#fff" }}
           >
             <GitHubIcon />
-            Continue with GitHub
+            GitHub
           </button>
         </div>
 
-        <Divider label="or sign in with email" />
+        <div className="flex items-center gap-3 mb-5">
+          <div className="flex-1 border-t" style={{ borderColor: BORDER }} />
+          <span className="text-xs" style={{ color: MUTED }}>or with email</span>
+          <div className="flex-1 border-t" style={{ borderColor: BORDER }} />
+        </div>
 
-        {/* Email / password form */}
-        <form onSubmit={handleCredentials} className="flex flex-col gap-3">
+        <form onSubmit={handleRegister} className="flex flex-col gap-3">
+          <input
+            type="text"
+            required
+            placeholder="Display name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full rounded-lg px-4 py-3 text-sm outline-none"
+            style={{ backgroundColor: BTN_DARK, border: `1px solid ${BORDER}`, color: TEXT }}
+          />
           <input
             type="email"
             required
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-lg px-4 py-3 text-sm outline-none focus:ring-1"
-            style={{
-              backgroundColor: BTN_DARK,
-              borderColor: BORDER,
-              color: TEXT,
-              border: `1px solid ${BORDER}`,
-            }}
+            className="w-full rounded-lg px-4 py-3 text-sm outline-none"
+            style={{ backgroundColor: BTN_DARK, border: `1px solid ${BORDER}`, color: TEXT }}
           />
           <input
             type="password"
             required
-            placeholder="Password"
+            minLength={8}
+            placeholder="Password (min 8 chars)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-lg px-4 py-3 text-sm outline-none focus:ring-1"
-            style={{
-              backgroundColor: BTN_DARK,
-              borderColor: BORDER,
-              color: TEXT,
-              border: `1px solid ${BORDER}`,
-            }}
+            className="w-full rounded-lg px-4 py-3 text-sm outline-none"
+            style={{ backgroundColor: BTN_DARK, border: `1px solid ${BORDER}`, color: TEXT }}
           />
           {error && <p className="text-xs text-red-400">{error}</p>}
           <button
@@ -116,14 +125,14 @@ export default function LoginPage() {
             className="rounded-lg px-4 py-3 text-sm font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
             style={{ backgroundColor: "#3A6B50", color: TEXT }}
           >
-            {loading ? "Signing in…" : "Sign in"}
+            {loading ? "Creating account…" : "Create account"}
           </button>
         </form>
 
         <p className="mt-5 text-center text-xs" style={{ color: MUTED }}>
-          No account?{" "}
-          <Link href="/register" className="underline hover:opacity-80" style={{ color: TEXT }}>
-            Create one
+          Already have an account?{" "}
+          <Link href="/login" className="underline hover:opacity-80" style={{ color: TEXT }}>
+            Sign in
           </Link>
         </p>
       </div>
