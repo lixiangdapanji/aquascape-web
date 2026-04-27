@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import type { Plant } from './page';
 
+const DARK_OVERLAY =
+  'linear-gradient(180deg, rgba(7,25,18,0.35) 0%, transparent 35%, transparent 55%, rgba(7,25,18,0.72) 100%)';
+
 const difficultyColor: Record<Plant['difficulty'], string> = {
   Easy: '#6FAE8E',
   Medium: '#CFC7B4',
@@ -20,24 +23,27 @@ function PlantCard({ plant }: { plant: Plant }) {
         border: '1px solid rgba(111, 122, 110, 0.4)',
       }}
     >
-      {imgError ? (
-        <div
-          className="w-full h-44 flex items-center justify-center"
-          style={{ background: 'linear-gradient(135deg, #155724, #6FAE8E)' }}
-        >
-          <span className="text-4xl font-bold text-white">{plant.name[0]}</span>
-        </div>
-      ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={plant.image}
-          alt={plant.name}
-          width={320}
-          height={180}
-          className="w-full h-44 object-cover"
-          onError={() => setImgError(true)}
-        />
-      )}
+      <div className="relative w-full h-44 overflow-hidden" style={{ backgroundColor: '#071912' }}>
+        {imgError ? (
+          <div className="w-full h-full flex items-center justify-center"
+            style={{ background: 'linear-gradient(135deg, #0F2A20, #1E3A2E)' }}>
+            <span className="text-5xl font-bold" style={{ color: '#3A6B50' }}>{plant.name[0]}</span>
+          </div>
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={plant.image}
+            alt={plant.name}
+            width={480}
+            height={320}
+            className="w-full h-full object-cover"
+            style={{ filter: 'brightness(0.88) saturate(1.1)' }}
+            onError={() => setImgError(true)}
+          />
+        )}
+        {/* Unified dark-aquarium overlay for all images */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: DARK_OVERLAY }} />
+      </div>
       <div className="flex flex-col gap-2 p-4">
         <div className="flex items-start justify-between gap-2">
           <span className="font-semibold" style={{ color: '#EDE7D9' }}>
